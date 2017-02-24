@@ -18,6 +18,34 @@ namespace AnaMenu
             InitializeComponent();
         }
 
+        // ekrandan inputbox ile sayi alıp almadığımızı kotrol amaçlı fonksiyondur. Sayı olmadığı sürece inputbox sayı istiyor.
+        public int sayiKontrol(int sira)
+        {
+            string girilen;
+            int sayi;
+            do
+            {
+                if (sira != 0)
+                    girilen = Interaction.InputBox(sira + ". Sayıyı Giriniz.", "Bilgi Girişi");
+                else
+                    girilen = Interaction.InputBox("Sayı Giriniz.", "Bilgi Girişi");
+            }
+            while (girilen == "" || !int.TryParse(girilen, out sayi));   //tryparse ile sayı olup olmadığını kontrol ediyoruz
+            return sayi;
+        }
+
+        public int sayiKontrol(string sira)
+        {
+            string girilen;
+            int sayi;
+            do
+            {
+                girilen = Interaction.InputBox(sira + " Sayısını Giriniz.", "Bilgi Girişi");
+            }
+            while (girilen == "" || !int.TryParse(girilen, out sayi));   //tryparse ile sayı olup olmadığını kontrol ediyoruz
+            return sayi;
+        }
+
         public void Button_Click(object sender, EventArgs e)
         {
             //button 1
@@ -39,36 +67,16 @@ namespace AnaMenu
             //Ekrandan bir sayi okuyup bu sayıyı ekrana geri basınız.
             else if (((Button)sender).Name == "btn3")
             {
-                string girilen;
-                int sayi;
-                do
-                {
-                    girilen = Interaction.InputBox("Sayı Giriniz.", "Bilgi Girişi");
-                }
-                while (girilen == "" || !int.TryParse(girilen, out sayi));  //tryparse ile sayı olup olmadığını kontrol ediyoruz
-
-                MessageBox.Show(sayi.ToString(), "Girdiğiniz Sayı", MessageBoxButtons.OK);
+                MessageBox.Show(sayiKontrol(0).ToString(), "Girdiğiniz Sayı", MessageBoxButtons.OK);
             }
 
             //button 4
             //Ekrandan okunan iki tam sayı (int) için basit işlemler yaparak ekrana sonuçları basan kod yazınız. Bu işlemler toplama, çıkarma, çarpma, bölme ve kalan işlemleridir.
             else if (((Button)sender).Name == "btn4")
             {
-                string girilen1;
-                int sayi1;
-                do
-                {
-                    girilen1 = Interaction.InputBox("1. Sayıyı Giriniz.", "Bilgi Girişi");
-                }
-                while (girilen1 == "" || !int.TryParse(girilen1, out sayi1));   //tryparse ile sayı olup olmadığını kontrol ediyoruz
+                int sayi1 = sayiKontrol(1);
 
-                string girilen2;
-                int sayi2;
-                do
-                {
-                    girilen2 = Interaction.InputBox("2. Sayıyı Giriniz.", "Bilgi Girişi");
-                }
-                while (girilen2 == "" || !int.TryParse(girilen2, out sayi2));   //tryparse ile sayı olup olmadığını kontrol ediyoruz
+                int sayi2 = sayiKontrol(2);
 
                 string sonuclar = "Toplama : " + sayi1.ToString() + " + " + sayi2.ToString() + " = " + (sayi1 + sayi2).ToString() + "\n" +
                                  "Çıkarma : " + sayi1.ToString() + " - " + sayi2.ToString() + " = " + (sayi1 - sayi2).ToString() + "\n" +
@@ -81,22 +89,10 @@ namespace AnaMenu
             //Klavyeden iki sayı alarak bu sayıları mantıksal olarak karşılaştıran kod örneğini yazınız. Kullanılacak olan operatörler şunlardır: == , != , < , > , <= , >=
             else if (((Button)sender).Name == "btn5")
             {
-                string sonuclar="";
-                string girilen1;
-                int sayi1;
-                do
-                {
-                    girilen1 = Interaction.InputBox("1. Sayıyı Giriniz.", "Bilgi Girişi");
-                }
-                while (girilen1 == "" || !int.TryParse(girilen1, out sayi1));   //tryparse ile sayı olup olmadığını kontrol ediyoruz
+                string sonuclar = "";
+                int sayi1 = sayiKontrol(1);
+                int sayi2 = sayiKontrol(2);
 
-                string girilen2;
-                int sayi2;
-                do
-                {
-                    girilen2 = Interaction.InputBox("2. Sayıyı Giriniz.", "Bilgi Girişi");
-                }
-                while (girilen2 == "" || !int.TryParse(girilen2, out sayi2));   //tryparse ile sayı olup olmadığını kontrol ediyoruz
                 //eşit mi değil mi kotrol ediyoruz
                 if (sayi1 == sayi2)
                     sonuclar += sayi1 + " == " + sayi2 + "\n";
@@ -105,7 +101,7 @@ namespace AnaMenu
                 // büyük mü küçük mü diye kontrol ediyoruz ama eşit de olabilirler o yüzden else if kullanıyoruz.
                 if (sayi1 < sayi2)
                     sonuclar += sayi1 + " < " + sayi2 + "\n";
-                else if (sayi1>sayi2)
+                else if (sayi1 > sayi2)
                     sonuclar += sayi1 + " > " + sayi2 + "\n";
                 //
                 if (sayi1 <= sayi2)
@@ -122,11 +118,73 @@ namespace AnaMenu
             else if (((Button)sender).Name == "btn6")
             {
 
+                string sonuclar = "";
+                int a = sayiKontrol("a");
+                int b = sayiKontrol("b");
+                int c = sayiKontrol("c");
+
+                //b<a<c , c<a<b
+                //b>a>c , c>a>b
+                if ((b < a && a < c) || (c < a && a < b) || (b > a && a > c) || (c > a && a > b))
+                    sonuclar += a + " Sayısı " + b + " ile " + c + " arasındadır. \n";
+
+
+                if (a == b && a < c)
+                    sonuclar += a + " = " + b + "  ve  " + a + " < " + c + "\n";
+
+                if (a > b || a > c)
+                {
+                    if (a > b && a > c)
+                        sonuclar += a + " > " + b + "  ve  " + a + " > " + c + "\n";
+                    else if (a > c)
+                        sonuclar += a + " > " + c + "\n";
+                    else
+                        sonuclar += a + " > " + b + "\n";
+
+                }
+
+                if (a == b && a == c)
+                    sonuclar += a + " = " + b + " = " + c;
+                MessageBox.Show(sonuclar, "Sonuçlar", MessageBoxButtons.OK);
+
             }
 
             //button 7
+            //Klavyeden 3 sayı okuyarak bu sayılardan en büyüğünü veya en küçüğünü ekrana yazan kodu yazınız.
             else if (((Button)sender).Name == "btn7")
             {
+                int buyuk;
+                int kucuk;
+                int sayi1 = sayiKontrol(1);
+                int sayi2 = sayiKontrol(2);
+                int sayi3 = sayiKontrol(3);
+
+                if (sayi1 > sayi2)
+                {
+                    if (sayi1 > sayi3)
+                        buyuk = sayi3;
+                    else
+                        buyuk = sayi1;
+
+                    if (sayi2 > sayi3)
+                        kucuk = sayi3;
+                    else
+                        kucuk = sayi2;
+                }
+                else
+                {
+                    if (sayi2 > sayi3)
+                        buyuk = sayi2;
+                    else
+                        buyuk = sayi3;
+
+                    if (sayi1 > sayi3)
+                        kucuk = sayi3;
+                    else
+                        kucuk = sayi1;
+                }
+                MessageBox.Show("Büyük sayı = " + buyuk + "\n" + "Küçük sayı = " + kucuk);
+
 
             }
 
